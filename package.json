@@ -29,7 +29,7 @@
     "deploy:fantom": "yarn build:fantom && yarn thegraph:deploy:fantom",
     "deploy:arbitrum": "yarn build:arbitrum && yarn thegraph:deploy:arbitrum",
     "release": "standard-version",
-    "test": "yarn clean && graph test -v 0.4.0",
+    "test": "yarn clean && yarn codegen && graph test -v 0.4.0",
     "coverage": "graph test -v 0.4.0 --coverage",
     "lint:check": "prettier --check './**'",
     "lint:fix": "sort-package-json && prettier --write ./**",
