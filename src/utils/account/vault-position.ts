@@ -6,7 +6,7 @@ import {
   AccountVaultPositionUpdate,
   Token,
   Transaction,
-  Vault
+  Vault,
 } from '../../../generated/schema';
 import { BIGINT_ZERO } from '../constants';
 import * as vaultPositionUpdateLibrary from './vault-position-update';
@@ -109,7 +109,7 @@ function getBalanceProfit(
 
     if (currentAmount.equals(BIGINT_ZERO)) {
       //User has no tokens so there is no additional gain
-      return currentProfit
+      return currentProfit;
     }
     if (withdrawAmount.gt(currentAmount)) {
       // User has profits.
