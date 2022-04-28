@@ -1,15 +1,15 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts';
+import { Vault as VaultContract } from '../../../generated/Registry/Vault';
 import {
   Account,
   AccountVaultPosition,
   AccountVaultPositionUpdate,
   Token,
   Transaction,
-  Vault,
+  Vault
 } from '../../../generated/schema';
-import { Vault as VaultContract } from '../../../generated/Registry/Vault';
+import { BIGINT_ZERO } from '../constants';
 import * as vaultPositionUpdateLibrary from './vault-position-update';
-import { BIGINT_ZERO, ZERO_ADDRESS } from '../constants';
 
 export function buildId(account: Account, vault: Vault): string {
   return account.id.concat('-').concat(vault.id);
@@ -106,6 +106,11 @@ function getBalanceProfit(
 ): BigInt {
   if (currentSharesBalance.isZero()) {
     // User withdrawn all the shares, so we can calculate the profit or losses.
+
+    if (currentAmount.equals(BIGINT_ZERO)) {
+      //User has no tokens so there is no additional gain
+      return currentProfit
+    }
     if (withdrawAmount.gt(currentAmount)) {
       // User has profits.
       return currentProfit.plus(withdrawAmount.minus(currentAmount));

@@ -1,5 +1,7 @@
-import { assert, clearStore, log, test } from 'matchstick-as/assembly/index';
+import { assert, clearStore,  test } from 'matchstick-as/assembly/index';
 import { VaultStub } from './stubs/vaultStateStub';
+import { Address, log } from '@graphprotocol/graph-ts';
+
 import { CreateVaultTransition } from './transitionMocks/createVaultTransition';
 import { defaults } from './default';
 import { validateDepositStateTransition } from './assertations/vaultDeposit';
@@ -15,6 +17,7 @@ import {
 } from './transitionMocks/withdrawTransition';
 import { validateWithdrawalStateTransition } from './assertations/vaultWithdraw';
 import {
+  handleDeposit,
   handleDepositEvent,
   handleDepositWithAmount,
   handleDepositWithAmountAndRecipient,
@@ -28,6 +31,7 @@ test('Test handleDeposit (call)', () => {
 
   let amount = '79056085';
   let recipient = defaults.senderAddress;
+
   let shareTokenBalances = new Map<string, string>();
   let wantTokenBalances = new Map<string, string>();
   wantTokenBalances.set(recipient, amount);
@@ -43,7 +47,6 @@ test('Test handleDeposit (call)', () => {
     amount,
     recipient
   );
-
   validateDepositStateTransition(
     defaults.senderAddress, //beneficiary
     vaultEntity.stub.address, // vault address
@@ -57,8 +60,9 @@ test('Test handleDeposit (call)', () => {
   );
 
   // only here for broken test coverage checker
-  //handleDeposit(depositTransition.mockCall.mock);
+  handleDeposit(depositTransition.mockCall.mock);
 });
+
 
 test('Test handleDepositWithAmount (call)', () => {
   clearStore();
@@ -99,7 +103,7 @@ test('Test handleDepositWithAmount (call)', () => {
   handleDepositWithAmount(depositTransition.mockCall.mock);
 });
 
-test('Test handleDepositWithAmountAndRecipient (call)', () => {
+ test('Test handleDepositWithAmountAndRecipient (call)', () => {
   clearStore();
 
   let amount = '79056085';
@@ -190,7 +194,7 @@ test('Test handleWithdraw (call)', () => {
   handleWithdraw(withdrawTransition.mockCall.mock);
 });
 
-test('Deposit call handlers shouldnt fire if Vault apiVersion > 0.4.3', () => {
+ test('Deposit call handlers shouldnt fire if Vault apiVersion > 0.4.3', () => {
   clearStore();
   let amount = '79056085';
   let apiVersion = '0.4.4';
@@ -424,4 +428,4 @@ test('Test handleWithdrawEvent', () => {
 
   // only here for broken test coverage checker
   handleWithdrawEvent(withdrawTransition.mockEvent.mock);
-});
+});  

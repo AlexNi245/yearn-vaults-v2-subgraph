@@ -22,14 +22,14 @@ export function validateWithdrawalStateTransition(
   assert.fieldEquals('AccountVaultPosition', positionId, 'balanceShares', '0');
   assert.fieldEquals('AccountVaultPosition', positionId, 'balanceTokens', '0');
   // todo: The AccountVaultPosition.balanceProfit field appears to returning inaccurate results, so cannot be tested.
-  /*
+  
   assert.fieldEquals(
     'AccountVaultPosition',
     positionId,
     'balanceProfit',
     "0"
   );
-  */
+  
 
   // Verify VaultUpdate
   let txnIndexToUse = '1';
