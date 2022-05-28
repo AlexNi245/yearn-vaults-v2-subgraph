@@ -84,6 +84,9 @@ const createNewVaultFromAddress = (
   vaultEntity.activation = vaultContract.activation();
   vaultEntity.apiVersion = vaultContract.apiVersion();
 
+  //Empty at creation
+  vaultEntity.withdrawalQueue = [];
+
   return vaultEntity;
 };
 
@@ -551,6 +554,16 @@ export function strategyAddedToQueue(
   if (strategy !== null) {
     strategy.inQueue = true;
     strategy.save();
+
+    let vault = Vault.load(event.address.toHexString());
+    if (vault != null) {
+      //Add the new strategy to the withdrawl queue
+      let withdrawlQueue = vault.withdrawalQueue;
+      withdrawlQueue.push(strategy.address.toHexString());
+      vault.withdrawalQueue = withdrawlQueue;
+
+      vault.save();
+    }
   }
 }
 

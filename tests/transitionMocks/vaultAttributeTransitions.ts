@@ -1,5 +1,6 @@
 import { Address, BigInt, ethereum } from '@graphprotocol/graph-ts';
 import {
+  handleStrategyAddedToQueue,
   handleUpdateDepositLimit,
   handleUpdateGovernance,
   handleUpdateGuardian,
@@ -11,6 +12,7 @@ import {
 import { MockBlock } from '../mappingParamBuilders/mockBlock';
 import { VaultStub } from '../stubs/vaultStateStub';
 import {
+  StrategyAddedToQueue,
   UpdateDepositLimit,
   UpdateGovernance,
   UpdateGuardian,
@@ -185,6 +187,32 @@ export class MockUpdateDepositLimitTransition {
     >(preTransitionStub.shareToken.address, depositLimit, null, null);
 
     handleUpdateDepositLimit(this.mockEvent.mock);
+
+    MockBlock.IncrementBlock();
+  }
+}
+
+export class MockStrategyAddedToQueueTransition {
+  mockEvent: GenericAttributeUpdateEvent<StrategyAddedToQueue, Address>;
+  preTransitionStub: VaultStub;
+  postTransitionStub: VaultStub;
+
+  constructor(preTransitionStub: VaultStub, strategyAdded: string) {
+    this.preTransitionStub = preTransitionStub;
+    let postTransitionStub = preTransitionStub.clone();
+
+    let withDrawlQueue = postTransitionStub.withDrawlQueue;
+    withDrawlQueue.push(strategyAdded);
+
+    postTransitionStub.withDrawlQueue = withDrawlQueue;
+    this.postTransitionStub = postTransitionStub;
+
+    this.mockEvent = new GenericAttributeUpdateEvent<
+      StrategyAddedToQueue,
+      Address
+    >(preTransitionStub.shareToken.address, strategyAdded, null, null);
+
+    handleStrategyAddedToQueue(this.mockEvent.mock);
 
     MockBlock.IncrementBlock();
   }

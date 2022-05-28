@@ -167,7 +167,7 @@ export class VaultStub extends GenericStateStub {
       'withdrawalQueue'.concat('(uint256):(address)')
     ).returns(
       //@ts-ignore
-      [ethereum.Value.fromAddressArray(value.map((v) => Address.fromString(v)))]
+      [ethereum.Value.fromAddressArray(value.map<Address>((v:string) => Address.fromString(v)))]
     );
     this._withDrawlQueue = value;
   }
