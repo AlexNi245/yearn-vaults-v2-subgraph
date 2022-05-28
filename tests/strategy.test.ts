@@ -23,6 +23,7 @@ import {
 import { getDayIDFromIndex } from '../src/utils/vault/vault-day-data';
 import { BIGINT_ZERO } from '../src/utils/constants';
 import { Vault } from '../generated/schema';
+import { MockStrategyAddedToQueueTransition } from './transitionMocks/vaultAttributeTransitions';
 
 test('Test handleHarvested Event', () => {
   clearStore();
@@ -358,4 +359,33 @@ test('Test UpdatedRewards Event', () => {
     newRewardsAddress
   );
   assert.fieldEquals('Strategy', strategyAddress, 'rewards', newRewardsAddress);
+});
+
+test('Test strategyAddedToQueue Event', () => {
+  clearStore();
+  let vault = CreateVaultTransition.DefaultVault();
+  let vaultAddress = vault.stub.address;
+
+  let oldWithdrawlQueue = new Array<string>();
+
+  assert.i32Equals(oldWithdrawlQueue.length, 0);
+
+  assert.fieldEquals('Vault', vaultAddress, 'withdrawalQueue', '[]');
+
+  let strategy = CreateStrategyTransition.DefaultStrategy(vault.stub);
+
+  assert.fieldEquals('Vault', vaultAddress, 'withdrawalQueue', '[]');
+
+  new MockStrategyAddedToQueueTransition(vault.stub, strategy.stub.address);
+
+  let expectedWithdrawlQueue = new Array<string>();
+  expectedWithdrawlQueue.push(strategy.stub.address);
+
+  
+  assert.fieldEquals(
+    'Vault',
+    vaultAddress,
+    'withdrawalQueue',
+    '[' + expectedWithdrawlQueue.toString() + ']'
+  );
 });
