@@ -365,18 +365,38 @@ test('Test UpdatedRewards Event', () => {
   assert.fieldEquals('Strategy', strategyAddress, 'rewards', newRewardsAddress);
 });
 
+test('Test strategyAddedV1', () => {
+  clearStore();
+  let vault = CreateVaultTransition.DefaultVault();
+  let vaultAddress = vault.stub.address;
+
+
+  let strategy = CreateStrategyTransition.DefaultStrategyWithDebt(
+    vault.stub,
+    '100000'
+  );
+  
+
+  assert.fieldEquals(
+    'Vault',
+    vaultAddress,
+    'withdrawalQueue',
+    '[' + strategy.stub.address.toString() + ']'
+  );
+});
+
+
+
 test('Test strategyAddedToQueue Event', () => {
   clearStore();
   let vault = CreateVaultTransition.DefaultVault();
   let vaultAddress = vault.stub.address;
 
   assert.i32Equals(vault.stub.withDrawlQueue.length, 0);
-
   assert.fieldEquals('Vault', vaultAddress, 'withdrawalQueue', '[]');
 
   let strategy = CreateStrategyTransition.DefaultStrategy(vault.stub);
 
-  assert.fieldEquals('Vault', vaultAddress, 'withdrawalQueue', '[]');
 
   new MockStrategyAddedToQueueTransition(vault.stub, strategy.stub.address);
 
@@ -406,23 +426,22 @@ test('Test setWithdrawlQueue Event', () => {
     defaults.anotherAddress
   );
 
-  assert.fieldEquals('Vault', vaultAddress, 'withdrawalQueue', '[]');
 
   new MockUpdateWithdrawlQueueTransition(vault.stub, [
     firstStrategy.stub.address,
     secondStrategy.stub.address,
   ]);
 
+
   let vaultWithNewWithdrawlQueue = Vault.load(vault.stub.address);
   assert.i32Equals(vaultWithNewWithdrawlQueue!.withdrawalQueue.length, 2);
-   
+
   let actualFirstStrat = vaultWithNewWithdrawlQueue!.withdrawalQueue[0];
   let actualSecondStrat = vaultWithNewWithdrawlQueue!.withdrawalQueue[1];
 
-
   //Ensure that both strategy are part of the withdrawlQueue before we delete the first one
   assert.stringEquals(firstStrategy.stub.address, actualFirstStrat);
-  assert.stringEquals(secondStrategy.stub.address, actualSecondStrat); 
+  assert.stringEquals(secondStrategy.stub.address, actualSecondStrat);
 });
 
 test('Test strategyRemovedFromQueue Event', () => {
@@ -439,6 +458,7 @@ test('Test strategyRemovedFromQueue Event', () => {
   //Add First strategy
   new MockStrategyAddedToQueueTransition(
     vault.stub,
+
     firstStrategy.stub.address
   );
 
@@ -461,6 +481,8 @@ test('Test strategyRemovedFromQueue Event', () => {
     vault.stub,
     firstStrategy.stub.address
   );
+
+
   //Withdrawl Queue now only contains the second strat
   assert.fieldEquals(
     'Vault',

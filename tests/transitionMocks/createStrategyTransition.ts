@@ -50,7 +50,7 @@ export class CreateStrategyTransition {
       true,
       vaultStub.wantToken,
       null,
-      null,
+      false,
       false,
       null,
       null,
@@ -77,7 +77,8 @@ export class CreateStrategyTransition {
     debtLimit: string | null,
     rateLimit: string | null,
     performanceFee: string | null,
-    stub: StrategyStub | null
+    stub: StrategyStub | null,
+    version: string = 'v1'
   ) {
     if (stub) {
       this.stub = stub;
@@ -107,7 +108,10 @@ export class CreateStrategyTransition {
       null
     );
 
+    
     handleStrategyAddedV1(this.mockEvent.mock);
     MockBlock.IncrementBlock();
   }
+
+
 }

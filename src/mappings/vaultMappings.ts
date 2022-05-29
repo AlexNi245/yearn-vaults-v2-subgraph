@@ -690,19 +690,13 @@ export function handleStrategyRemovedFromQueue(
   );
 }
 
-export function handleUpdateWithdrawlQueue(
-  event: UpdateWithdrawalQueue
-): void {
+export function handleUpdateWithdrawlQueue(event: UpdateWithdrawalQueue): void {
   let ethTransaction = getOrCreateTransactionFromEvent(
     event,
     'UpdateWithdrawlQueue'
   );
 
-  vaultLibrary.updateWithdrawlQueue(
-    event.params.queue,
-    ethTransaction,
-    event
-  );
+  vaultLibrary.updateWithdrawlQueue(event.params.queue, ethTransaction, event);
 }
 
 export function handleUpdateRewards(event: UpdateRewardsEvent): void {

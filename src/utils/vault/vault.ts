@@ -559,7 +559,10 @@ export function strategyAddedToQueue(
     if (vault != null) {
       //Add the new strategy to the withdrawl queue
       let withdrawlQueue = vault.withdrawalQueue;
-      withdrawlQueue.push(strategy.address.toHexString());
+      //Only add strategy to queue when its not was previously added
+      if (!withdrawlQueue.includes(strategy.address.toHexString())) {
+        withdrawlQueue.push(strategy.address.toHexString());
+      }
       vault.withdrawalQueue = withdrawlQueue;
 
       vault.save();
