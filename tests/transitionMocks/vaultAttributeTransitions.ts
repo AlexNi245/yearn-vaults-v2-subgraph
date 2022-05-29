@@ -1,6 +1,7 @@
 import { Address, BigInt, ethereum } from '@graphprotocol/graph-ts';
 import {
   handleStrategyAddedToQueue,
+  handleStrategyRemovedFromQueue,
   handleUpdateDepositLimit,
   handleUpdateGovernance,
   handleUpdateGuardian,
@@ -13,6 +14,7 @@ import { MockBlock } from '../mappingParamBuilders/mockBlock';
 import { VaultStub } from '../stubs/vaultStateStub';
 import {
   StrategyAddedToQueue,
+  StrategyRemovedFromQueue,
   UpdateDepositLimit,
   UpdateGovernance,
   UpdateGuardian,
@@ -22,6 +24,7 @@ import {
   UpdateRewards,
 } from '../../generated/Registry/Vault';
 import { GenericAttributeUpdateEvent } from '../mappingParamBuilders/genericUpdateParam';
+import { removeElementFromArray } from '../../src/utils/commons';
 
 export class MockUpdateManagementFeeTransition {
   mockEvent: GenericAttributeUpdateEvent<UpdateManagementFee, BigInt>;
@@ -213,6 +216,31 @@ export class MockStrategyAddedToQueueTransition {
     >(preTransitionStub.shareToken.address, strategyAdded, null, null);
 
     handleStrategyAddedToQueue(this.mockEvent.mock);
+
+    MockBlock.IncrementBlock();
+  }
+}
+export class MockStrategyRemovedFromQueueTransition {
+  mockEvent: GenericAttributeUpdateEvent<StrategyRemovedFromQueue, Address>;
+  preTransitionStub: VaultStub;
+  postTransitionStub: VaultStub;
+
+  constructor(preTransitionStub: VaultStub, strategyRemoved: string) {
+    this.preTransitionStub = preTransitionStub;
+    let postTransitionStub = preTransitionStub.clone();
+
+    postTransitionStub.withDrawlQueue = removeElementFromArray(
+      postTransitionStub.withDrawlQueue,
+      strategyRemoved
+    );
+    this.postTransitionStub = postTransitionStub;
+
+    this.mockEvent = new GenericAttributeUpdateEvent<
+      StrategyRemovedFromQueue,
+      Address
+    >(preTransitionStub.shareToken.address, strategyRemoved, null, null);
+
+    handleStrategyRemovedFromQueue(this.mockEvent.mock);
 
     MockBlock.IncrementBlock();
   }

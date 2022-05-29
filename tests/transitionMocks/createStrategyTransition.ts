@@ -10,10 +10,13 @@ import { handleStrategyAddedV1 } from '../../src/mappings/vaultMappings';
 export class CreateStrategyTransition {
   static DefaultAddress: string = StrategyStub.DefaultAddress;
 
-  static DefaultStrategy(vaultStub: VaultStub): CreateStrategyTransition {
+  static DefaultStrategy(
+    vaultStub: VaultStub,
+    address: string = StrategyStub.DefaultAddress
+  ): CreateStrategyTransition {
     let strategyStub = new StrategyStub(
       null,
-      null,
+      address,
       vaultStub.shareToken.address,
       null,
       true,

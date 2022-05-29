@@ -23,7 +23,10 @@ import {
 import { getDayIDFromIndex } from '../src/utils/vault/vault-day-data';
 import { BIGINT_ZERO } from '../src/utils/constants';
 import { Vault } from '../generated/schema';
-import { MockStrategyAddedToQueueTransition } from './transitionMocks/vaultAttributeTransitions';
+import {
+  MockStrategyAddedToQueueTransition,
+  MockStrategyRemovedFromQueueTransition,
+} from './transitionMocks/vaultAttributeTransitions';
 
 test('Test handleHarvested Event', () => {
   clearStore();
@@ -366,9 +369,7 @@ test('Test strategyAddedToQueue Event', () => {
   let vault = CreateVaultTransition.DefaultVault();
   let vaultAddress = vault.stub.address;
 
-  let oldWithdrawlQueue = new Array<string>();
-
-  assert.i32Equals(oldWithdrawlQueue.length, 0);
+  assert.i32Equals(vault.stub.withDrawlQueue.length, 0);
 
   assert.fieldEquals('Vault', vaultAddress, 'withdrawalQueue', '[]');
 
@@ -381,11 +382,55 @@ test('Test strategyAddedToQueue Event', () => {
   let expectedWithdrawlQueue = new Array<string>();
   expectedWithdrawlQueue.push(strategy.stub.address);
 
-  
   assert.fieldEquals(
     'Vault',
     vaultAddress,
     'withdrawalQueue',
     '[' + expectedWithdrawlQueue.toString() + ']'
+  );
+});
+
+test('Test strategyRemovedFromQueue Event', () => {
+  clearStore();
+  let vault = CreateVaultTransition.DefaultVault();
+  let vaultAddress = vault.stub.address;
+
+  let firstStrategy = CreateStrategyTransition.DefaultStrategy(vault.stub);
+  let secondStrategy = CreateStrategyTransition.DefaultStrategy(
+    vault.stub,
+    defaults.anotherAddress
+  );
+
+  //Add First strategy
+  new MockStrategyAddedToQueueTransition(
+    vault.stub,
+    firstStrategy.stub.address
+  );
+
+  //Add Second strategy
+  new MockStrategyAddedToQueueTransition(
+    vault.stub,
+    secondStrategy.stub.address
+  );
+
+  let vaultWithNewWithdrawlQueue = Vault.load(vault.stub.address);
+  let actualFirstStrat = vaultWithNewWithdrawlQueue!.withdrawalQueue[0];
+  let actualSecondStrat = vaultWithNewWithdrawlQueue!.withdrawalQueue[1];
+
+  //Ensure that both strategy are part of the withdrawlQueue before we delete the first one
+  assert.stringEquals(firstStrategy.stub.address, actualFirstStrat);
+  assert.stringEquals(secondStrategy.stub.address, actualSecondStrat);
+
+  //Delete first strat from withdrawl queue
+  new MockStrategyRemovedFromQueueTransition(
+    vault.stub,
+    firstStrategy.stub.address
+  );
+  //Withdrawl Queue now only contains the second strat
+  assert.fieldEquals(
+    'Vault',
+    vaultAddress,
+    'withdrawalQueue',
+    '[' + secondStrategy.stub.address.toString() + ']'
   );
 });

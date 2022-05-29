@@ -26,7 +26,7 @@ import * as transferLibrary from '../transfer';
 import * as tokenLibrary from '../token';
 import * as registryLibrary from '../registry/registry';
 import { updateVaultDayData } from './vault-day-data';
-import { booleanToString } from '../commons';
+import { booleanToString, removeElementFromArray } from '../commons';
 import { getOrCreateHealthCheck } from '../healthCheck';
 
 const buildId = (vaultAddress: Address): string => {
@@ -579,6 +579,17 @@ export function strategyRemovedFromQueue(
   if (strategy !== null) {
     strategy.inQueue = false;
     strategy.save();
+
+    let vault = Vault.load(event.address.toHexString());
+    if (vault != null) {
+
+      vault.withdrawalQueue = removeElementFromArray(
+        vault.withdrawalQueue,
+        strategy.address.toHexString()
+      );
+
+      vault.save();
+    }
   }
 }
 
