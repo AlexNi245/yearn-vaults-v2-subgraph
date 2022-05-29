@@ -31,6 +31,7 @@ import {
   StrategyUpdatePerformanceFee as StrategyUpdatePerformanceFeeEvent,
   StrategyUpdateMinDebtPerHarvest as StrategyUpdateMinDebtPerHarvestEvent,
   StrategyUpdateMaxDebtPerHarvest as StrategyUpdateMaxDebtPerHarvestEvent,
+  UpdateWithdrawalQueue,
 } from '../../generated/Registry/Vault';
 import { Strategy, StrategyMigration, Vault } from '../../generated/schema';
 import { printCallInfo } from '../utils/commons';
@@ -684,6 +685,21 @@ export function handleStrategyRemovedFromQueue(
   );
   vaultLibrary.strategyRemovedFromQueue(
     event.params.strategy,
+    ethTransaction,
+    event
+  );
+}
+
+export function handleUpdateWithdrawlQueue(
+  event: UpdateWithdrawalQueue
+): void {
+  let ethTransaction = getOrCreateTransactionFromEvent(
+    event,
+    'UpdateWithdrawlQueue'
+  );
+
+  vaultLibrary.updateWithdrawlQueue(
+    event.params.queue,
     ethTransaction,
     event
   );

@@ -9,12 +9,14 @@ import {
   handleUpdateManagementFee,
   handleUpdatePerformanceFee,
   handleUpdateRewards,
+  handleUpdateWithdrawlQueue,
 } from '../../src/mappings/vaultMappings';
 import { MockBlock } from '../mappingParamBuilders/mockBlock';
 import { VaultStub } from '../stubs/vaultStateStub';
 import {
   StrategyAddedToQueue,
   StrategyRemovedFromQueue,
+  UpdateWithdrawalQueue,
   UpdateDepositLimit,
   UpdateGovernance,
   UpdateGuardian,
@@ -25,6 +27,7 @@ import {
 } from '../../generated/Registry/Vault';
 import { GenericAttributeUpdateEvent } from '../mappingParamBuilders/genericUpdateParam';
 import { removeElementFromArray } from '../../src/utils/commons';
+import { UpdateWithdrawalQueueParamBuilder } from '../mappingParamBuilders/updateWithdrawlQueueParamBuilder';
 
 export class MockUpdateManagementFeeTransition {
   mockEvent: GenericAttributeUpdateEvent<UpdateManagementFee, BigInt>;
@@ -216,6 +219,30 @@ export class MockStrategyAddedToQueueTransition {
     >(preTransitionStub.shareToken.address, strategyAdded, null, null);
 
     handleStrategyAddedToQueue(this.mockEvent.mock);
+
+    MockBlock.IncrementBlock();
+  }
+}
+export class MockUpdateWithdrawlQueueTransition {
+  mockEvent: UpdateWithdrawalQueueParamBuilder<UpdateWithdrawalQueue>;
+  preTransitionStub: VaultStub;
+  postTransitionStub: VaultStub;
+
+  constructor(preTransitionStub: VaultStub, newWithdrawlQueue: string[]) {
+    this.preTransitionStub = preTransitionStub;
+    let postTransitionStub = preTransitionStub.clone();
+
+    postTransitionStub.withDrawlQueue = newWithdrawlQueue;
+    this.postTransitionStub = postTransitionStub;
+
+    this.mockEvent = new UpdateWithdrawalQueueParamBuilder<UpdateWithdrawalQueue>(
+      preTransitionStub.shareToken.address,
+      newWithdrawlQueue,
+      null,
+      null
+    );
+
+    handleUpdateWithdrawlQueue(this.mockEvent.mock);
 
     MockBlock.IncrementBlock();
   }

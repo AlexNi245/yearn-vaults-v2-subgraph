@@ -582,7 +582,6 @@ export function strategyRemovedFromQueue(
 
     let vault = Vault.load(event.address.toHexString());
     if (vault != null) {
-
       vault.withdrawalQueue = removeElementFromArray(
         vault.withdrawalQueue,
         strategy.address.toHexString()
@@ -590,6 +589,16 @@ export function strategyRemovedFromQueue(
 
       vault.save();
     }
+  }
+}
+
+export function updateWithdrawlQueue(
+  queue: Address[],
+  ethTransaction: Transaction,
+  event: ethereum.Event
+): void {
+  for (let i = 0; i < queue.length; i++) {
+    strategyAddedToQueue(queue[i], ethTransaction, event);
   }
 }
 

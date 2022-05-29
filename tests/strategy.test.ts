@@ -26,6 +26,7 @@ import { Vault } from '../generated/schema';
 import {
   MockStrategyAddedToQueueTransition,
   MockStrategyRemovedFromQueueTransition,
+  MockUpdateWithdrawlQueueTransition,
 } from './transitionMocks/vaultAttributeTransitions';
 
 test('Test handleHarvested Event', () => {
@@ -388,6 +389,40 @@ test('Test strategyAddedToQueue Event', () => {
     'withdrawalQueue',
     '[' + expectedWithdrawlQueue.toString() + ']'
   );
+});
+
+test('Test setWithdrawlQueue Event', () => {
+  clearStore();
+  let vault = CreateVaultTransition.DefaultVault();
+  let vaultAddress = vault.stub.address;
+
+  assert.i32Equals(vault.stub.withDrawlQueue.length, 0);
+
+  assert.fieldEquals('Vault', vaultAddress, 'withdrawalQueue', '[]');
+
+  let firstStrategy = CreateStrategyTransition.DefaultStrategy(vault.stub);
+  let secondStrategy = CreateStrategyTransition.DefaultStrategy(
+    vault.stub,
+    defaults.anotherAddress
+  );
+
+  assert.fieldEquals('Vault', vaultAddress, 'withdrawalQueue', '[]');
+
+  new MockUpdateWithdrawlQueueTransition(vault.stub, [
+    firstStrategy.stub.address,
+    secondStrategy.stub.address,
+  ]);
+
+  let vaultWithNewWithdrawlQueue = Vault.load(vault.stub.address);
+  assert.i32Equals(vaultWithNewWithdrawlQueue!.withdrawalQueue.length, 2);
+   
+  let actualFirstStrat = vaultWithNewWithdrawlQueue!.withdrawalQueue[0];
+  let actualSecondStrat = vaultWithNewWithdrawlQueue!.withdrawalQueue[1];
+
+
+  //Ensure that both strategy are part of the withdrawlQueue before we delete the first one
+  assert.stringEquals(firstStrategy.stub.address, actualFirstStrat);
+  assert.stringEquals(secondStrategy.stub.address, actualSecondStrat); 
 });
 
 test('Test strategyRemovedFromQueue Event', () => {
