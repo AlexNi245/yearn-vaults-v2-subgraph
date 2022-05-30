@@ -23,6 +23,7 @@ import {
   UpdateManagement,
   UpdateGovernance,
   UpdateGuardian,
+  UpdateWithdrawalQueue,
 } from '../../generated/YvWBTCVault/Vault';
 import { Strategy, Transaction, Vault } from '../../generated/schema';
 import { isEventBlockNumberLt, printCallInfo } from '../utils/commons';
@@ -779,6 +780,27 @@ export function handleStrategyRemovedFromQueue(
     );
     vaultLibrary.strategyRemovedFromQueue(
       event.params.strategy,
+      ethTransaction,
+      event
+    );
+  }
+}
+
+export function handleUpdateWithdrawlQueue(event: UpdateWithdrawalQueue): void {
+  if (
+    isEventBlockNumberLt(
+      'yvWBTCVault_StrategyRemovedFromQueue',
+      event.block,
+      YV_WBTC_VAULT_END_BLOCK_CUSTOM
+    )
+  ) {
+    let ethTransaction = getOrCreateTransactionFromEvent(
+      event,
+      'yvWBTCVault_UpdateWithdrawlQueue'
+    );
+
+    vaultLibrary.updateWithdrawlQueue(
+      event.params.queue,
       ethTransaction,
       event
     );

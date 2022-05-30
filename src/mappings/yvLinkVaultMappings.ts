@@ -42,6 +42,7 @@ import {
   UpdateGovernance,
   UpdateGuardian,
   UpdateManagement,
+  UpdateWithdrawalQueue,
 } from '../../generated/YvLinkVault/Vault';
 
 function createYvLinkVaultIfNeeded(
@@ -731,6 +732,27 @@ export function handleStrategyAddedToQueue(
 
     vaultLibrary.strategyAddedToQueue(
       event.params.strategy,
+      ethTransaction,
+      event
+    );
+  }
+}
+
+export function handleUpdateWithdrawlQueue(event: UpdateWithdrawalQueue): void {
+  if (
+    isEventBlockNumberLt(
+      'yvLinkVault_StrategyAddedToQueue',
+      event.block,
+      YV_LINK_VAULT_END_BLOCK_CUSTOM
+    )
+  ) {
+    let ethTransaction = getOrCreateTransactionFromEvent(
+      event,
+      'yvLinkVault_UpdateWithdrawlQueue'
+    );
+
+    vaultLibrary.updateWithdrawlQueue(
+      event.params.queue,
       ethTransaction,
       event
     );

@@ -188,7 +188,7 @@ dataSources:
           handler: handleStrategyAddedToQueue
         - event: StrategyRemovedFromQueue(indexed address)
           handler: handleStrategyRemovedFromQueue
-        - event : UpdateWithdrawalQueue(address[20])
+        - event : UpdateWithdrawalQueue(address[])
           handler : handleUpdateWithdrawlQueue
         - event: UpdateRewards(address)
           handler: handleUpdateRewards
@@ -288,7 +288,7 @@ templates:
           handler: handleStrategyAddedToQueue
         - event: StrategyRemovedFromQueue(indexed address)
           handler: handleStrategyRemovedFromQueue
-        - event : UpdateWithdrawalQueue(address[20])
+        - event : UpdateWithdrawalQueue(address[])
           handler : handleUpdateWithdrawlQueue
         - event: UpdateRewards(address)
           handler: handleUpdateRewards
