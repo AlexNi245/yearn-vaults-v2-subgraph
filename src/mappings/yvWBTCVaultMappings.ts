@@ -789,7 +789,7 @@ export function handleStrategyRemovedFromQueue(
 export function handleUpdateWithdrawlQueue(event: UpdateWithdrawalQueue): void {
   if (
     isEventBlockNumberLt(
-      'yvWBTCVault_StrategyRemovedFromQueue',
+      'yvWBTCVault_UpdateWithdrawlQueue',
       event.block,
       YV_WBTC_VAULT_END_BLOCK_CUSTOM
     )

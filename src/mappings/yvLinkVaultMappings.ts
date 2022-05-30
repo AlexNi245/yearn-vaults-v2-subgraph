@@ -741,7 +741,7 @@ export function handleStrategyAddedToQueue(
 export function handleUpdateWithdrawlQueue(event: UpdateWithdrawalQueue): void {
   if (
     isEventBlockNumberLt(
-      'yvLinkVault_StrategyAddedToQueue',
+      'yvLinkVault_UpdateWithdrawlQueue',
       event.block,
       YV_LINK_VAULT_END_BLOCK_CUSTOM
     )

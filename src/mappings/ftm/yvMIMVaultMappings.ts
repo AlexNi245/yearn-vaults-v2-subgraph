@@ -25,6 +25,7 @@ import {
   StrategyAddedToQueue as StrategyAddedToQueueEvent,
   StrategyRemovedFromQueue as StrategyRemovedFromQueueEvent,
   UpdateRewards as UpdateRewardsEvent,
+  UpdateWithdrawalQueue,
 } from '../../../generated/ftmYvMIMVault/Vault';
 import { Strategy, Transaction, Vault } from '../../../generated/schema';
 import { isEventBlockNumberLt, printCallInfo } from '../../utils/commons';
@@ -801,6 +802,27 @@ export function handleStrategyRemovedFromQueue(
     );
     vaultLibrary.strategyRemovedFromQueue(
       event.params.strategy,
+      ethTransaction,
+      event
+    );
+  }
+}
+
+export function handleUpdateWithdrawlQueue(event: UpdateWithdrawalQueue): void {
+  if (
+    isEventBlockNumberLt(
+      'ftmYvMIMVault_UpdateWithdrawlQueue',
+      event.block,
+      FTM_YV_MIM_VAULT_END_BLOCK_CUSTOM
+    )
+  ) {
+    let ethTransaction = getOrCreateTransactionFromEvent(
+      event,
+      'ftmYvMIMVault_UpdateWithdrawlQueue'
+    );
+
+    vaultLibrary.updateWithdrawlQueue(
+      event.params.queue,
       ethTransaction,
       event
     );
