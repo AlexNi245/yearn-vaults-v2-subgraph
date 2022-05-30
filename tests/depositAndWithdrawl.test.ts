@@ -235,7 +235,8 @@ test('Deposit call handlers shouldnt fire if Vault apiVersion > 0.4.3', () => {
         wantTokenBalances, // token balances
         null, // token usdc value
         null // price oracle address
-      )
+      ),
+      null //withdrawlQueue
     ),
     null, //registryAddress
     null, //releaseId
@@ -305,7 +306,8 @@ test('Withdraw call handlers shouldnt fire if Vault apiVersion > 0.4.3', () => {
         wantTokenBalances, // token balances
         null, // token usdc value
         null // price oracle address
-      )
+      ),
+      null //withdrawlQueue
     ),
     null, //registryAddress
     null, //releaseId

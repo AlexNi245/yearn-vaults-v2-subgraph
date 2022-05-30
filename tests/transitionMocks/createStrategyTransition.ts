@@ -108,10 +108,7 @@ export class CreateStrategyTransition {
       null
     );
 
-    
     handleStrategyAddedV1(this.mockEvent.mock);
     MockBlock.IncrementBlock();
   }
-
-
 }

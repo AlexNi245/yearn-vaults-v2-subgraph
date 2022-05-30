@@ -370,12 +370,10 @@ test('Test strategyAddedV1', () => {
   let vault = CreateVaultTransition.DefaultVault();
   let vaultAddress = vault.stub.address;
 
-
   let strategy = CreateStrategyTransition.DefaultStrategyWithDebt(
     vault.stub,
     '100000'
   );
-  
 
   assert.fieldEquals(
     'Vault',
@@ -384,8 +382,6 @@ test('Test strategyAddedV1', () => {
     '[' + strategy.stub.address.toString() + ']'
   );
 });
-
-
 
 test('Test strategyAddedToQueue Event', () => {
   clearStore();
@@ -396,7 +392,6 @@ test('Test strategyAddedToQueue Event', () => {
   assert.fieldEquals('Vault', vaultAddress, 'withdrawalQueue', '[]');
 
   let strategy = CreateStrategyTransition.DefaultStrategy(vault.stub);
-
 
   new MockStrategyAddedToQueueTransition(vault.stub, strategy.stub.address);
 
@@ -426,12 +421,10 @@ test('Test setWithdrawlQueue Event', () => {
     defaults.anotherAddress
   );
 
-
   new MockUpdateWithdrawlQueueTransition(vault.stub, [
     firstStrategy.stub.address,
     secondStrategy.stub.address,
   ]);
-
 
   let vaultWithNewWithdrawlQueue = Vault.load(vault.stub.address);
   assert.i32Equals(vaultWithNewWithdrawlQueue!.withdrawalQueue.length, 2);
@@ -481,7 +474,6 @@ test('Test strategyRemovedFromQueue Event', () => {
     vault.stub,
     firstStrategy.stub.address
   );
-
 
   //Withdrawl Queue now only contains the second strat
   assert.fieldEquals(
