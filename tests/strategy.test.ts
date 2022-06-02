@@ -436,6 +436,42 @@ test('Test setWithdrawlQueue Event', () => {
   assert.stringEquals(firstStrategy.stub.address, actualFirstStrat);
   assert.stringEquals(secondStrategy.stub.address, actualSecondStrat);
 });
+test('Test setWithdrawlQueue Event -- new withdrawlQueue should not contain strategies from the old withdrawlQueue', () => {
+  clearStore();
+  let vault = CreateVaultTransition.DefaultVault();
+  let vaultAddress = vault.stub.address;
+
+  assert.i32Equals(vault.stub.withDrawlQueue.length, 0);
+
+  assert.fieldEquals('Vault', vaultAddress, 'withdrawalQueue', '[]');
+
+  let firstStrategy = CreateStrategyTransition.DefaultStrategy(vault.stub);
+
+  new MockUpdateWithdrawlQueueTransition(vault.stub, [
+    firstStrategy.stub.address,
+  ]);
+
+  let vaultWithNewWithdrawlQueue = Vault.load(vault.stub.address);
+  assert.i32Equals(vaultWithNewWithdrawlQueue!.withdrawalQueue.length, 1);
+
+  let actualFirstStrat = vaultWithNewWithdrawlQueue!.withdrawalQueue[0];
+  assert.stringEquals(firstStrategy.stub.address, actualFirstStrat);
+
+  let secondStrategy = CreateStrategyTransition.DefaultStrategy(
+    vault.stub,
+    defaults.anotherAddress
+  );
+  //Because we are setting the queue "firstStrat" is no longer part of the withdrawlQueue
+  new MockUpdateWithdrawlQueueTransition(vault.stub, [
+    secondStrategy.stub.address,
+  ]);
+
+  let vaultWithUpdatedWithdrawlQueue = Vault.load(vault.stub.address);
+  assert.i32Equals(vaultWithUpdatedWithdrawlQueue!.withdrawalQueue.length, 1);
+
+  let newFirstStrat = vaultWithUpdatedWithdrawlQueue!.withdrawalQueue[0];
+  assert.stringEquals(secondStrategy.stub.address, newFirstStrat);
+});
 
 test('Test strategyRemovedFromQueue Event', () => {
   clearStore();

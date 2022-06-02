@@ -596,12 +596,43 @@ export function strategyRemovedFromQueue(
 }
 
 export function updateWithdrawlQueue(
-  queue: Address[],
+  newQueue: Address[],
   ethTransaction: Transaction,
   event: ethereum.Event
 ): void {
-  for (let i = 0; i < queue.length; i++) {
-    strategyAddedToQueue(queue[i], ethTransaction, event);
+  let vault = Vault.load(event.address.toHexString());
+  if (vault != null) {
+    const oldWithdrawlQueue = vault.withdrawalQueue;
+    //Before we can set the new queue we need to remove all previous strats
+    for (let i = 0; i < oldWithdrawlQueue.length; i++) {
+      let currentStrategyAddress = oldWithdrawlQueue[i];
+      let currentStrategy = Strategy.load(currentStrategyAddress);
+
+      //Setting the inQueue field on the strat to false
+      if (currentStrategy !== null) {
+        currentStrategy.inQueue = false;
+        currentStrategy.save();
+      }
+    }
+    //Initialize a new empty queue
+    let vaultsNewWithdrawlQueue = new Array<string>();
+
+    //Now we can add the new strats to the queue
+    for (let i = 0; i < newQueue.length; i++) {
+      let currentStrategyAddress = newQueue[i].toHexString();
+      let currentStrategy = Strategy.load(currentStrategyAddress);
+
+      //Setting the inQueue field on the strat to true
+      if (currentStrategy !== null) {
+        currentStrategy.inQueue = true;
+        currentStrategy.save();
+      }
+
+      //Add the strates addr to the vaults withdrawlQueue
+      vaultsNewWithdrawlQueue.push(currentStrategyAddress);
+    }
+    vault.withdrawalQueue = vaultsNewWithdrawlQueue;
+    vault.save();
   }
 }
 
