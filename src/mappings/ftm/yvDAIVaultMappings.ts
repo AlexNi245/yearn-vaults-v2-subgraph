@@ -281,12 +281,17 @@ export function handleStrategyMigrated(event: StrategyMigrated): void {
           null,
           ethTransaction
         );
-        vaultLibrary.strategyRemovedFromQueue(
-          oldStrategyAddress,
-          ethTransaction,
-          event
-        );
       }
+      //We can now remove the old strat from the queue
+      log.info('[Strategy Migrated] Removing old strategy', [
+        oldStrategyAddress.toHexString(),
+      ]);
+
+      vaultLibrary.strategyRemovedFromQueue(
+        oldStrategyAddress,
+        ethTransaction,
+        event
+      );
     }
   }
 }
