@@ -697,7 +697,9 @@ export function handleStrategyRemovedFromQueue(
   );
 }
 //UpdateWithdrawalQueue -> 0x695ac3ac73f08f2002284ffe563cefe798ee2878a5e04219522e2e99eb89d168
-export function handleUpdateWithdrawalQueue(event: UpdateWithdrawalQueue): void {
+export function handleUpdateWithdrawalQueue(
+  event: UpdateWithdrawalQueue
+): void {
   let ethTransaction = getOrCreateTransactionFromEvent(
     event,
     'UpdateWithdrawalQueue'

@@ -812,7 +812,9 @@ export function handleStrategyRemovedFromQueue(
   }
 }
 
-export function handleUpdateWithdrawalQueue(event: UpdateWithdrawalQueue): void {
+export function handleUpdateWithdrawalQueue(
+  event: UpdateWithdrawalQueue
+): void {
   if (
     isEventBlockNumberLt(
       'ftmYv2CRVVault_UpdateWithdrawalQueue',
