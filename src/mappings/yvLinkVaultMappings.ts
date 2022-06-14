@@ -743,20 +743,20 @@ export function handleStrategyAddedToQueue(
   }
 }
 
-export function handleUpdateWithdrawlQueue(event: UpdateWithdrawalQueue): void {
+export function handleUpdateWithdrawalQueue(event: UpdateWithdrawalQueue): void {
   if (
     isEventBlockNumberLt(
-      'yvLinkVault_UpdateWithdrawlQueue',
+      'yvLinkVault_UpdateWithdrawalQueue',
       event.block,
       YV_LINK_VAULT_END_BLOCK_CUSTOM
     )
   ) {
     let ethTransaction = getOrCreateTransactionFromEvent(
       event,
-      'yvLinkVault_UpdateWithdrawlQueue'
+      'yvLinkVault_UpdateWithdrawalQueue'
     );
 
-    vaultLibrary.updateWithdrawlQueue(
+    vaultLibrary.UpdateWithdrawalQueue(
       event.params.queue,
       ethTransaction,
       event

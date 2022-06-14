@@ -189,7 +189,7 @@ dataSources:
         - event: StrategyRemovedFromQueue(indexed address)
           handler: handleStrategyRemovedFromQueue
         - event : UpdateWithdrawalQueue(address[20])
-          handler : handleUpdateWithdrawlQueue
+          handler : handleUpdateWithdrawalQueue
         - event: UpdateRewards(address)
           handler: handleUpdateRewards
         - event: Deposit(indexed address,uint256,uint256)
@@ -289,7 +289,7 @@ templates:
         - event: StrategyRemovedFromQueue(indexed address)
           handler: handleStrategyRemovedFromQueue
         - event : UpdateWithdrawalQueue(address[20])
-          handler : handleUpdateWithdrawlQueue
+          handler : handleUpdateWithdrawalQueue
         - event: UpdateRewards(address)
           handler: handleUpdateRewards
         - event: Deposit(indexed address,uint256,uint256)

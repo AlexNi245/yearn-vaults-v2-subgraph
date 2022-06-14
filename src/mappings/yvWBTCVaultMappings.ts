@@ -791,20 +791,20 @@ export function handleStrategyRemovedFromQueue(
   }
 }
 
-export function handleUpdateWithdrawlQueue(event: UpdateWithdrawalQueue): void {
+export function handleUpdateWithdrawalQueue(event: UpdateWithdrawalQueue): void {
   if (
     isEventBlockNumberLt(
-      'yvWBTCVault_UpdateWithdrawlQueue',
+      'yvWBTCVault_UpdateWithdrawalQueue',
       event.block,
       YV_WBTC_VAULT_END_BLOCK_CUSTOM
     )
   ) {
     let ethTransaction = getOrCreateTransactionFromEvent(
       event,
-      'yvWBTCVault_UpdateWithdrawlQueue'
+      'yvWBTCVault_UpdateWithdrawalQueue'
     );
 
-    vaultLibrary.updateWithdrawlQueue(
+    vaultLibrary.UpdateWithdrawalQueue(
       event.params.queue,
       ethTransaction,
       event

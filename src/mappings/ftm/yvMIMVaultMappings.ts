@@ -813,20 +813,20 @@ export function handleStrategyRemovedFromQueue(
   }
 }
 
-export function handleUpdateWithdrawlQueue(event: UpdateWithdrawalQueue): void {
+export function handleUpdateWithdrawalQueue(event: UpdateWithdrawalQueue): void {
   if (
     isEventBlockNumberLt(
-      'ftmYvMIMVault_UpdateWithdrawlQueue',
+      'ftmYvMIMVault_UpdateWithdrawalQueue',
       event.block,
       FTM_YV_MIM_VAULT_END_BLOCK_CUSTOM
     )
   ) {
     let ethTransaction = getOrCreateTransactionFromEvent(
       event,
-      'ftmYvMIMVault_UpdateWithdrawlQueue'
+      'ftmYvMIMVault_UpdateWithdrawalQueue'
     );
 
-    vaultLibrary.updateWithdrawlQueue(
+    vaultLibrary.UpdateWithdrawalQueue(
       event.params.queue,
       ethTransaction,
       event

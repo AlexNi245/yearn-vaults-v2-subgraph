@@ -696,14 +696,14 @@ export function handleStrategyRemovedFromQueue(
     event
   );
 }
-//handleUpdateWithdrawlQueue -> 0x695ac3ac73f08f2002284ffe563cefe798ee2878a5e04219522e2e99eb89d168
-export function handleUpdateWithdrawlQueue(event: UpdateWithdrawalQueue): void {
+//UpdateWithdrawalQueue -> 0x695ac3ac73f08f2002284ffe563cefe798ee2878a5e04219522e2e99eb89d168
+export function handleUpdateWithdrawalQueue(event: UpdateWithdrawalQueue): void {
   let ethTransaction = getOrCreateTransactionFromEvent(
     event,
-    'UpdateWithdrawlQueue'
+    'UpdateWithdrawalQueue'
   );
 
-  vaultLibrary.updateWithdrawlQueue(event.params.queue, ethTransaction, event);
+  vaultLibrary.UpdateWithdrawalQueue(event.params.queue, ethTransaction, event);
 }
 
 export function handleUpdateRewards(event: UpdateRewardsEvent): void {

@@ -22,6 +22,7 @@ import {
   handleWithdrawEvent,
 } from '../src/mappings/vaultMappings';
 import { TokenStub } from './stubs/tokenStateStub';
+import { BIGINT_MAX, MAX_UINT } from '../src/utils/constants';
 
 test('Test handleDeposit (call)', () => {
   clearStore();
@@ -144,7 +145,7 @@ test('Test handleDepositWithAmountAndRecipient (call)', () => {
 test('Test handleWithdraw (call)', () => {
   clearStore();
   // set up the deposit
-  let amount = '79056085';
+  let amount = BIGINT_MAX.toString();
   let shareTokenBalances = new Map<string, string>();
   let sender = defaults.senderAddress;
   let vaultAddress = VaultStub.DefaultAddress;

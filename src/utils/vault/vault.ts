@@ -595,7 +595,7 @@ export function strategyRemovedFromQueue(
   }
 }
 
-export function updateWithdrawlQueue(
+export function UpdateWithdrawalQueue(
   newQueue: Address[],
   ethTransaction: Transaction,
   event: ethereum.Event

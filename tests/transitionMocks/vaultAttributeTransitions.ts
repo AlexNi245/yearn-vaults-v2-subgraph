@@ -9,7 +9,7 @@ import {
   handleUpdateManagementFee,
   handleUpdatePerformanceFee,
   handleUpdateRewards,
-  handleUpdateWithdrawlQueue,
+  handleUpdateWithdrawalQueue,
 } from '../../src/mappings/vaultMappings';
 import { MockBlock } from '../mappingParamBuilders/mockBlock';
 import { VaultStub } from '../stubs/vaultStateStub';
@@ -223,7 +223,7 @@ export class MockStrategyAddedToQueueTransition {
     MockBlock.IncrementBlock();
   }
 }
-export class MockUpdateWithdrawlQueueTransition {
+export class MockUpdateWithdrawalQueueTransition {
   mockEvent: UpdateWithdrawalQueueParamBuilder<UpdateWithdrawalQueue>;
   preTransitionStub: VaultStub;
   postTransitionStub: VaultStub;
@@ -242,7 +242,7 @@ export class MockUpdateWithdrawlQueueTransition {
       null
     );
 
-    handleUpdateWithdrawlQueue(this.mockEvent.mock);
+    handleUpdateWithdrawalQueue(this.mockEvent.mock);
 
     MockBlock.IncrementBlock();
   }
