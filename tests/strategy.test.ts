@@ -519,5 +519,3 @@ test('Test strategyRemovedFromQueue Event', () => {
     '[' + secondStrategy.stub.address.toString() + ']'
   );
 });
-
-
