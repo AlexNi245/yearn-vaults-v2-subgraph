@@ -26,7 +26,7 @@ import { Vault } from '../generated/schema';
 import {
   MockStrategyAddedToQueueTransition,
   MockStrategyRemovedFromQueueTransition,
-  MockUpdateWithdrawlQueueTransition,
+  MockUpdateWithdrawalQueueTransition,
 } from './transitionMocks/vaultAttributeTransitions';
 
 test('Test handleHarvested Event', () => {
@@ -421,7 +421,7 @@ test('Test setWithdrawlQueue Event', () => {
     defaults.anotherAddress
   );
 
-  new MockUpdateWithdrawlQueueTransition(vault.stub, [
+  new MockUpdateWithdrawalQueueTransition(vault.stub, [
     firstStrategy.stub.address,
     secondStrategy.stub.address,
   ]);
@@ -447,7 +447,7 @@ test('Test setWithdrawlQueue Event -- new withdrawlQueue should not contain stra
 
   let firstStrategy = CreateStrategyTransition.DefaultStrategy(vault.stub);
 
-  new MockUpdateWithdrawlQueueTransition(vault.stub, [
+  new MockUpdateWithdrawalQueueTransition(vault.stub, [
     firstStrategy.stub.address,
   ]);
 
@@ -462,7 +462,7 @@ test('Test setWithdrawlQueue Event -- new withdrawlQueue should not contain stra
     defaults.anotherAddress
   );
   //Because we are setting the queue "firstStrat" is no longer part of the withdrawlQueue
-  new MockUpdateWithdrawlQueueTransition(vault.stub, [
+  new MockUpdateWithdrawalQueueTransition(vault.stub, [
     secondStrategy.stub.address,
   ]);
 
@@ -519,3 +519,5 @@ test('Test strategyRemovedFromQueue Event', () => {
     '[' + secondStrategy.stub.address.toString() + ']'
   );
 });
+
+
